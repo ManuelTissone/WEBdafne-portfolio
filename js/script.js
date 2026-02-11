@@ -151,13 +151,106 @@ document.addEventListener('DOMContentLoaded', function() {
         aboutObserver.observe(aboutSection);
     }
 
-    // Lightbox
+    // Carousel: auto-scroll + mouse drag (PC) + touch swipe (mobile)
+    const track = document.querySelector('.carousel-track');
+    const trackItems = track.querySelectorAll('.carousel-item');
+    const halfWidth = track.scrollWidth / 2;
+    let position = 0;
+    let autoSpeed = 0.8; // px per frame
+    let isDragging = false;
+    let startX = 0;
+    let dragStartPos = 0;
+    let dragDistance = 0;
+    let lastTime = performance.now();
+    let velocity = 0;
+    let animationId;
+
+    function animate(now) {
+        const delta = now - lastTime;
+        lastTime = now;
+
+        if (!isDragging) {
+            // Apply velocity decay after drag release
+            if (Math.abs(velocity) > 0.5) {
+                position -= velocity;
+                velocity *= 0.95;
+            } else {
+                velocity = 0;
+                position -= autoSpeed;
+            }
+        }
+
+        // Loop: reset when past half (duplicated items)
+        if (position <= -halfWidth) {
+            position += halfWidth;
+        } else if (position > 0) {
+            position -= halfWidth;
+        }
+
+        track.style.transform = `translateX(${position}px)`;
+        animationId = requestAnimationFrame(animate);
+    }
+
+    animationId = requestAnimationFrame(animate);
+
+    // Mouse drag (PC)
+    track.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        dragStartPos = position;
+        dragDistance = 0;
+        velocity = 0;
+        e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = e.clientX - startX;
+        dragDistance = diff;
+        position = dragStartPos + diff;
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        velocity = -dragDistance * 0.05;
+    });
+
+    // Touch swipe (mobile)
+    track.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        dragStartPos = position;
+        dragDistance = 0;
+        velocity = 0;
+    }, { passive: true });
+
+    track.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = e.touches[0].clientX - startX;
+        dragDistance = diff;
+        position = dragStartPos + diff;
+    }, { passive: true });
+
+    track.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        velocity = -dragDistance * 0.05;
+    });
+
+    // Prevent img drag ghost
+    track.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+
+    // Lightbox (only open on click, not drag)
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = lightbox.querySelector('img');
     const lightboxClose = lightbox.querySelector('.lightbox-close');
 
-    document.querySelectorAll('.carousel-item').forEach(item => {
+    trackItems.forEach(item => {
         item.addEventListener('click', () => {
+            if (Math.abs(dragDistance) > 5) return; // was a drag, not a click
             const img = item.querySelector('img');
             lightboxImg.src = img.src;
             lightboxImg.alt = img.alt;
