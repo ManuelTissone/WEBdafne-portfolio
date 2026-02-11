@@ -9,7 +9,7 @@
     --white: #ffffff;
     --gray-dark: #1a1a1a;
     --gray-medium: #333333;
-    --gray-light: #e0e0e0;
+    --gray-light: #ffffff;
     --transition: all 0.3s ease;
 
     /* Spacing scale */
@@ -293,7 +293,7 @@ body {
 
 .obras-section {
     padding: var(--spacing-2xl) 0;
-    background-color: var(--white);
+    background-color: #4f4f4f;
     overflow: hidden;
 }
 
@@ -653,6 +653,7 @@ body {
     }
 
     .hero {
+        background-image: url('../images/edit6.jpg');
         background-size: cover;
         background-position: center top;
         background-attachment: scroll;
