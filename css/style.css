@@ -29,7 +29,7 @@
     --font-2xl: 35px;
 
     /* Separator height */
-    --separator-height: 45vh;
+    --separator-height: 20vh;
 }
 
 html {
@@ -136,7 +136,7 @@ body {
 .hero {
     height: 100vh;
     background-image: url('../images/edit6.1.jpg');
-    background-size: 100vw auto;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
     background-attachment: fixed;
@@ -147,15 +147,7 @@ body {
     overflow: hidden;
 }
 
-.hero video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-}
+
 
 .hero-overlay {
     position: absolute;
@@ -288,13 +280,32 @@ body {
 }
 
 /* ========================
-   OBRAS (ex-portfolio)
+   OBRAS
    ======================== */
 
 .obras-section {
-    padding: var(--spacing-2xl) 0;
-    background-color: #4f4f4f;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+    background-color: var(--black);
     overflow: hidden;
+}
+
+.obras-section .section-title {
+    color: var(--white);
+    font-weight: 300;
+    font-size: 32px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.obras-subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-xl);
 }
 
 /* Carousel */
@@ -310,15 +321,15 @@ body {
 .carousel-container {
     width: 100%;
     overflow: hidden;
-    mask: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
-    -webkit-mask: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 .carousel-track {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     width: max-content;
-    animation: carousel-scroll 25s linear infinite;
+    animation: carousel-scroll 30s linear infinite;
 }
 
 .carousel-track:hover {
@@ -327,18 +338,29 @@ body {
 
 .carousel-item {
     flex-shrink: 0;
-    width: 300px;
-    height: 380px;
-    border-radius: 8px;
+    width: 320px;
+    height: 420px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    background-color: var(--gray-light);
+    position: relative;
+    transition: transform 0.4s ease;
+}
+
+.carousel-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    transition: background 0.4s ease;
+    pointer-events: none;
+}
+
+.carousel-item:hover::after {
+    background: transparent;
 }
 
 .carousel-item:hover {
-    transform: scale(1.05);
-    filter: brightness(1.1);
+    transform: scale(1.03);
 }
 
 .carousel-item img {
@@ -346,28 +368,65 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s ease;
 }
 
-.carousel-info {
+.carousel-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Lightbox */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.95);
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    padding: var(--spacing-lg);
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.lightbox.active img {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.lightbox-close {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--spacing-sm);
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    top: var(--spacing-md);
+    right: var(--spacing-md);
     color: var(--white);
+    font-size: 32px;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    opacity: 0.6;
+    background: none;
+    border: none;
+    font-family: inherit;
 }
 
-.carousel-info h3 {
-    font-size: var(--font-sm);
-    margin-bottom: 2px;
-    letter-spacing: 1px;
-}
-
-.carousel-info p {
-    font-size: var(--font-xs);
-    opacity: 0.8;
-    letter-spacing: 1px;
+.lightbox-close:hover {
+    opacity: 1;
 }
 
 /* ========================
@@ -402,7 +461,7 @@ body {
 }
 
 .nueva-seccion {
-    background-image: url('../images/lapiceras.jpg');
+    background-image: url('../images/serpientecut.JPG');
     background-size: 15%;
     background-position: center;
     background-attachment: fixed;
@@ -737,17 +796,24 @@ body {
         font-size: 12px;
     }
 
+    .obras-section .section-title {
+        font-size: 22px;
+        letter-spacing: 5px;
+    }
+
+    .obras-subtitle {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
     .carousel-item {
-        width: 200px;
-        height: 250px;
+        width: 220px;
+        height: 290px;
     }
 
-    .carousel-info h3 {
-        font-size: 12px;
-    }
-
-    .carousel-info p {
-        font-size: 10px;
+    .lightbox img {
+        max-width: 95vw;
+        max-height: 85vh;
     }
 
     .separador-section,
