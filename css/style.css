@@ -196,23 +196,6 @@ body {
     color: var(--black);
 }
 
-.btn-autobiografia {
-    display: inline-block;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border: 2px solid var(--black);
-    color: var(--black);
-    text-decoration: none;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: var(--font-md);
-    transition: var(--transition);
-}
-
-.btn-autobiografia:hover {
-    background-color: var(--black);
-    color: var(--white);
-}
-
 .scroll-indicator {
     position: absolute;
     bottom: var(--spacing-md);
@@ -495,33 +478,58 @@ body {
    ======================== */
 
 .about-section {
-    padding: var(--spacing-2xl) 0;
+    padding: 120px 0;
     background-color: var(--white);
+}
+
+.about-section .section-title {
+    text-align: center;
+    font-weight: 300;
+    font-size: 32px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-xl);
 }
 
 .about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xl);
-    align-items: center;
+    gap: 80px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .about-image .image-placeholder {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 3 / 4;
     background-color: var(--black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
-    font-size: 18px;
 }
 
 .about-text {
-    margin-bottom: var(--spacing-sm);
-    font-size: 19px;
-    line-height: 1.8;
-    color: var(--gray-medium);
+    font-size: 16px;
+    line-height: 2;
+    color: #555;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.3px;
+}
+
+.btn-autobiografia {
+    display: inline-block;
+    padding: 14px 40px;
+    border: 1px solid var(--black);
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 12px;
+    transition: var(--transition);
+    margin-top: var(--spacing-sm);
+}
+
+.btn-autobiografia:hover {
+    background-color: var(--black);
+    color: var(--white);
 }
 
 /* ========================
@@ -529,91 +537,121 @@ body {
    ======================== */
 
 .contact-section {
-    padding: var(--spacing-2xl) 0;
+    padding: 120px 0;
     background-color: var(--white);
+}
+
+.contact-section .section-title {
+    text-align: center;
+    font-weight: 300;
+    font-size: 32px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-xl);
 }
 
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-xl);
+    gap: 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
 }
 
 .contact-info h3 {
-    font-size: var(--font-xl);
-    margin-bottom: var(--spacing-md);
-    letter-spacing: 1px;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-lg);
 }
 
 .info-item {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-    font-size: 25px;
+    margin-bottom: var(--spacing-md);
+    font-size: 15px;
+    color: #555;
+    letter-spacing: 0.3px;
 }
 
 .icon {
-    font-size: var(--font-lg);
+    font-size: 18px;
 }
 
 .social-links {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-lg);
 }
 
 .social-link {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--black);
     color: var(--black);
     text-decoration: none;
-    font-size: 25px;
-    letter-spacing: 1px;
+    font-size: 18px;
     transition: var(--transition);
 }
 
 .social-link:hover {
     background-color: var(--black);
-    color: var(--gray-light);
+    color: var(--white);
 }
 
 .form-group {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--gray-light);
+    padding: 14px 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
     font-family: inherit;
-    font-size: var(--font-sm);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: transparent;
     transition: var(--transition);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--black);
+    border-bottom-color: var(--black);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #999;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 .submit-button {
     width: 100%;
-    padding: var(--spacing-sm);
+    padding: 16px;
     background-color: var(--black);
     color: var(--white);
     border: none;
-    font-size: var(--font-sm);
-    letter-spacing: 2px;
+    font-size: 12px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     cursor: pointer;
     transition: var(--transition);
+    margin-top: var(--spacing-sm);
 }
 
 .submit-button:hover {
-    background-color: var(--gray-dark);
+    background-color: var(--gray-medium);
 }
 
 /* ========================
@@ -749,6 +787,16 @@ body {
         margin-bottom: var(--spacing-sm);
     }
 
+    .about-section {
+        padding: 60px 0;
+    }
+
+    .about-section .section-title {
+        font-size: 22px;
+        letter-spacing: 5px;
+        margin-bottom: var(--spacing-lg);
+    }
+
     .about-grid,
     .contact-grid {
         grid-template-columns: 1fr;
@@ -757,41 +805,53 @@ body {
 
     .about-text {
         font-size: 14px;
-        line-height: 1.6;
+        line-height: 1.8;
     }
 
     .btn-autobiografia {
-        font-size: 14px;
-        padding: 10px 24px;
+        font-size: 11px;
+        padding: 12px 30px;
+    }
+
+    .contact-section {
+        padding: 60px 0;
+    }
+
+    .contact-section .section-title {
+        font-size: 22px;
+        letter-spacing: 5px;
+        margin-bottom: var(--spacing-lg);
     }
 
     .contact-info h3 {
-        font-size: 18px;
-        margin-bottom: var(--spacing-sm);
+        font-size: 15px;
+        margin-bottom: var(--spacing-md);
     }
 
     .info-item {
-        font-size: 14px;
-        margin-bottom: var(--spacing-xs);
+        font-size: 13px;
+        margin-bottom: var(--spacing-sm);
     }
 
     .icon {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .social-link {
-        font-size: 18px;
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
     }
 
     .form-group input,
     .form-group textarea {
-        font-size: 14px;
-        padding: 12px;
+        font-size: 13px;
+        padding: 12px 0;
     }
 
     .submit-button {
-        font-size: 14px;
-        padding: 12px;
+        font-size: 11px;
+        padding: 14px;
     }
 
     .footer p {
