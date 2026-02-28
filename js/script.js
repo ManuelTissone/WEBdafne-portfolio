@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(result.message);
             }
         } catch (error) {
+            console.error('Web3Forms error:', error.message);
             submitButton.textContent = 'Error al enviar';
             submitButton.style.backgroundColor = '#c0392b';
         } finally {
