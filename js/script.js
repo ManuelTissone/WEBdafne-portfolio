@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         const submitButton = contactForm.querySelector('.submit-button');
-        const originalText = submitButton.textContent;
-        submitButton.textContent = 'Enviando...';
+        const originalText = submitButton.querySelector('span').textContent;
+        submitButton.querySelector('span').textContent = 'Enviando...';
         submitButton.disabled = true;
 
         const formData = new FormData(contactForm);
@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (result.success) {
-                submitButton.textContent = 'Mensaje Enviado';
+                submitButton.querySelector('span').textContent = 'Mensaje Enviado';
+                submitButton.style.backgroundImage = 'none';
                 submitButton.style.backgroundColor = '#4CAF50';
                 contactForm.reset();
             } else {
@@ -93,11 +94,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Web3Forms error:', error.message);
-            submitButton.textContent = 'Error al enviar';
+            submitButton.querySelector('span').textContent = 'Error al enviar';
+            submitButton.style.backgroundImage = 'none';
             submitButton.style.backgroundColor = '#c0392b';
         } finally {
             setTimeout(() => {
-                submitButton.textContent = originalText;
+                submitButton.querySelector('span').textContent = originalText;
+                submitButton.style.backgroundImage = '';
                 submitButton.style.backgroundColor = '';
                 submitButton.disabled = false;
             }, 3000);
@@ -149,18 +152,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    const contactSection = document.querySelector('.contact-section');
+    const contactObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                contactObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    if (contactSection) {
+        contactObserver.observe(contactSection);
+    }
+
     const aboutSection = document.querySelector('.about-section');
     const aboutObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const aboutImage = entry.target.querySelector('.about-image');
-                const aboutContent = entry.target.querySelector('.about-content');
-
-                if (aboutImage && aboutContent) {
+                if (aboutImage) {
                     aboutImage.style.animation = 'fadeInUp 1s ease forwards';
-                    aboutContent.style.animation = 'fadeInUp 1s ease 0.2s forwards';
                 }
-
                 aboutObserver.unobserve(entry.target);
             }
         });
@@ -169,6 +182,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (aboutSection) {
         aboutObserver.observe(aboutSection);
     }
+
+    // Magic text: word-by-word scroll reveal on about paragraphs
+    const aboutParagraphs = document.querySelectorAll('.about-text');
+    aboutParagraphs.forEach(p => {
+        const words = p.textContent.trim().split(/\s+/);
+        p.innerHTML = words.map(w => `<span class="magic-word">${w}</span>`).join(' ');
+    });
+
+    const magicWords = document.querySelectorAll('.magic-word');
+    const totalWords = magicWords.length;
+
+    function updateMagicText() {
+        if (!aboutSection || totalWords === 0) return;
+        const rect = aboutSection.getBoundingClientRect();
+        const wh = window.innerHeight;
+        // 0 cuando la sección entra por abajo, 1 cuando el top llega al 15% del viewport
+        const progress = Math.max(0, Math.min(1, (wh - rect.top) / (wh * 1.15)));
+
+        magicWords.forEach((span, i) => {
+            const wordStart = i / totalWords;
+            const wordEnd = wordStart + 1 / totalWords;
+            const p = Math.max(0, Math.min(1, (progress - wordStart) / (wordEnd - wordStart)));
+            span.style.opacity = 0.12 + p * 0.88;
+        });
+    }
+
+    window.addEventListener('scroll', updateMagicText, { passive: true });
+    updateMagicText();
 
     // Carousel: auto-scroll + mouse drag (PC) + touch swipe (mobile)
     const track = document.querySelector('.carousel-track');

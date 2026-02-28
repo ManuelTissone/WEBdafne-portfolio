@@ -445,7 +445,7 @@ body {
 }
 
 .nueva-seccion {
-    background-image: url('../images/separador.jpg');
+    background-image: url('../images/sepa4.png');
     background-size: 15%;
     background-position: center;
     background-attachment: fixed;
@@ -510,6 +510,12 @@ body {
     color: #555;
     margin-bottom: var(--spacing-md);
     letter-spacing: 0.3px;
+}
+
+.magic-word {
+    display: inline-block;
+    opacity: 0.12;
+    will-change: opacity;
 }
 
 .btn-autobiografia {
@@ -639,17 +645,66 @@ body {
     padding: 16px;
     background-color: var(--black);
     color: var(--white);
-    border: none;
+    border: 1px solid var(--black);
     font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: var(--transition);
     margin-top: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease;
+}
+
+.submit-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: var(--white);
+    transition: height 0.4s ease;
+    z-index: 0;
+}
+
+.submit-button span {
+    position: relative;
+    z-index: 1;
 }
 
 .submit-button:hover {
-    background-color: var(--gray-medium);
+    color: var(--black);
+}
+
+.submit-button:hover::after {
+    height: 100%;
+}
+
+/* Contact animations */
+.contact-section .section-title,
+.contact-info,
+.contact-form {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.contact-section.visible .section-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.contact-section.visible .contact-info {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.15s;
+}
+
+.contact-section.visible .contact-form {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
 }
 
 /* ========================
@@ -657,15 +712,28 @@ body {
    ======================== */
 
 .footer {
-    padding: var(--spacing-lg) 0;
-    background-color: var(--black);
+    padding: 18px 0;
+    background-image: url('../images/sepa4.png');
+    background-size: cover;
+    background-position: center;
     color: var(--white);
     text-align: center;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
 }
 
 .footer p {
     font-size: var(--font-xs);
     letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
 }
 
 /* ========================
