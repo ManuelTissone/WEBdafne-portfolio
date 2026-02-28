@@ -46,37 +46,61 @@
         </div>
         <div class="carousel-container">
             <div class="carousel-track">
-                <div class="carousel-item">
-                    <img src="images/foco.JPG" alt="Urban Perspectives">
+                <div class="carousel-item" data-obra="foco">
+                    <img src="images/foco.JPG" alt="El Foco">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/pildoras.JPG" alt="Bic 3/4">
+                <div class="carousel-item" data-obra="pildoras">
+                    <img src="images/pildoras.JPG" alt="Píldoras">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/saxo.JPG" alt="Brand Identity">
+                <div class="carousel-item" data-obra="saxo">
+                    <img src="images/saxo.JPG" alt="Saxofón">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/tuercas.JPG" alt="Night Vibes">
+                <div class="carousel-item" data-obra="tuercas">
+                    <img src="images/tuercas.JPG" alt="Tuercas">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/foco.JPG" alt="Urban Perspectives">
+                <div class="carousel-item" data-obra="foco">
+                    <img src="images/foco.JPG" alt="El Foco">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/pildoras.JPG" alt="Bic 3/4">
+                <div class="carousel-item" data-obra="pildoras">
+                    <img src="images/pildoras.JPG" alt="Píldoras">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/saxo.JPG" alt="Brand Identity">
+                <div class="carousel-item" data-obra="saxo">
+                    <img src="images/saxo.JPG" alt="Saxofón">
+                    <div class="obra-badge"></div>
                 </div>
-                <div class="carousel-item">
-                    <img src="images/tuercas.JPG" alt="Night Vibes">
+                <div class="carousel-item" data-obra="tuercas">
+                    <img src="images/tuercas.JPG" alt="Tuercas">
+                    <div class="obra-badge"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close">&times;</button>
-        <img src="" alt="Obra expandida">
+    <div class="obra-modal" id="obraModal" role="dialog" aria-modal="true" aria-labelledby="obraModalTitle">
+        <div class="obra-modal-backdrop"></div>
+        <div class="obra-modal-content">
+            <button class="obra-modal-close" aria-label="Cerrar">&times;</button>
+            <div class="obra-modal-img-wrap">
+                <img src="" alt="" id="obraModalImg">
+            </div>
+            <div class="obra-modal-info">
+                <span class="obra-modal-year" id="obraModalYear"></span>
+                <h3 class="obra-modal-title" id="obraModalTitle"></h3>
+                <p class="obra-modal-tecnica" id="obraModalTecnica"></p>
+                <p class="obra-modal-desc" id="obraModalDesc"></p>
+                <div class="obra-modal-precio-wrap">
+                    <span class="obra-modal-precio-label">Precio</span>
+                    <span class="obra-modal-precio-valor" id="obraModalPrecio"></span>
+                </div>
+                <a href="#contact" class="obra-modal-cta" id="obraModalCta">Contactar para adquirir</a>
+            </div>
+        </div>
     </div>
 
     <section id="separador" class="separador-section parallax-section">

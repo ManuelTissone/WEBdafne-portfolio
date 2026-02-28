@@ -341,11 +341,12 @@ body {
 }
 
 .carousel-item:hover::after {
-    background: transparent;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.18) 15%, transparent 40%);
 }
 
 .carousel-item:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
 }
 
 .carousel-item img {
@@ -360,58 +361,197 @@ body {
     transform: scale(1.05);
 }
 
-/* Lightbox */
-.lightbox {
+/* ========================
+   OBRA BADGE
+   ======================== */
+
+.obra-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.obra-badge::before { content: '—\00a0'; letter-spacing: 0; }
+.obra-badge::after  { content: '\00a0—'; letter-spacing: 0; }
+
+.carousel-item:hover .obra-badge {
+    opacity: 1;
+}
+
+/* ========================
+   OBRA MODAL
+   ======================== */
+
+.obra-modal {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba(0, 0, 0, 0.95);
     align-items: center;
     justify-content: center;
-    cursor: zoom-out;
     padding: var(--spacing-lg);
 }
 
-.lightbox.active {
+.obra-modal.active {
     display: flex;
 }
 
-.lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.lightbox.active img {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.lightbox-close {
+.obra-modal-backdrop {
     position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    color: var(--white);
-    font-size: 32px;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
     cursor: pointer;
-    width: 48px;
-    height: 48px;
+}
+
+.obra-modal-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideUp 0.4s ease;
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.obra-modal-img-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.obra-modal-img-wrap img {
+    width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+}
+
+.obra-modal-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-md) 0;
+}
+
+.obra-modal-close {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.25s ease;
+    line-height: 1;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.3s ease;
-    opacity: 0.6;
-    background: none;
-    border: none;
     font-family: inherit;
 }
 
-.lightbox-close:hover {
+.obra-modal-close:hover {
     opacity: 1;
+}
+
+.obra-modal-year {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    display: block;
+    margin-bottom: 14px;
+}
+
+.obra-modal-title {
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 18px;
+    line-height: 1.2;
+}
+
+.obra-modal-tecnica {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+    margin-bottom: 28px;
+}
+
+.obra-modal-desc {
+    font-size: 14px;
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.68);
+    margin-bottom: 36px;
+    letter-spacing: 0.2px;
+}
+
+.obra-modal-precio-wrap {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 24px;
+    margin-bottom: 32px;
+}
+
+.obra-modal-precio-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    margin-bottom: 10px;
+}
+
+.obra-modal-precio-valor {
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--white);
+    display: block;
+}
+
+.obra-modal-cta {
+    display: inline-block;
+    padding: 14px 36px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    text-align: center;
+    align-self: flex-start;
+}
+
+.obra-modal-cta:hover {
+    background: var(--white);
+    color: var(--black);
+    border-color: var(--white);
 }
 
 /* Obras animations */
@@ -1013,5 +1153,63 @@ body {
     .nueva-seccion {
         height: 1cm;
         background-attachment: scroll;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Badge + gradiente siempre visibles en mobile */
+    .carousel-item::after {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.1) 26%, transparent 42%);
+    }
+
+    .obra-badge {
+        opacity: 1;
+        font-size: 8px;
+        letter-spacing: 3px;
+    }
+
+    /* Modal mobile: bottom sheet */
+    .obra-modal {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .obra-modal-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        max-height: 88vh;
+        overflow-y: auto;
+        padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+        background: #0f0f0f;
+        border-radius: 16px 16px 0 0;
+        animation: modalSlideUpMobile 0.35s ease;
+    }
+
+    @keyframes modalSlideUpMobile {
+        from { transform: translateY(100%); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .obra-modal-close {
+        top: 12px;
+        right: var(--spacing-md);
+    }
+
+    .obra-modal-img-wrap img {
+        max-height: 42vh;
+    }
+
+    .obra-modal-title {
+        font-size: 20px;
+        letter-spacing: 3px;
+    }
+
+    .obra-modal-precio-valor {
+        font-size: 28px;
+    }
+
+    .obra-modal-cta {
+        align-self: stretch;
+        text-align: center;
     }
 }

@@ -314,33 +314,90 @@ document.addEventListener('DOMContentLoaded', function() {
         img.addEventListener('dragstart', (e) => e.preventDefault());
     });
 
-    // Lightbox (only open on click, not drag)
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('img');
-    const lightboxClose = lightbox.querySelector('.lightbox-close');
+    // Obra Modal
+    const obrasData = {
+        foco: {
+            titulo: 'El Foco',
+            tecnica: 'Lapicera Bic sobre papel',
+            descripcion: 'Una introspección surrealista sobre la iluminación y el pensamiento creativo. El trazo de la Bic revela la dualidad entre lo cotidiano y lo extraordinario.',
+            precio: 'USD 450',
+            año: '2023'
+        },
+        pildoras: {
+            titulo: 'Píldoras',
+            tecnica: 'Lapicera Bic - Papel Texturado - Colores Lyra',
+            descripcion: 'Composición que explora la tensión entre lo orgánico y lo artificial. Cada detalle fue construido trazo a trazo con paciencia y precisión.',
+            precio: 'USD 380',
+            año: '2026'
+        },
+        saxo: {
+            titulo: 'Saxofón',
+            tecnica: 'Lapicera Bic sobre papel',
+            descripcion: 'Un homenaje a la música como lenguaje universal. La geometría del instrumento se convierte en poesía visual donde el ritmo y el trazo convergen.',
+            precio: 'USD 520',
+            año: '2023'
+        },
+        tuercas: {
+            titulo: 'Tuercas',
+            tecnica: 'Lapicera Bic sobre papel',
+            descripcion: 'Los objetos mecánicos del cotidiano transformados en composición artística. La precisión del trazo refleja la complejidad de lo simple.',
+            precio: 'USD 290',
+            año: '2022'
+        }
+    };
+
+    const obraModal        = document.getElementById('obraModal');
+    const obraModalImg     = document.getElementById('obraModalImg');
+    const obraModalYear    = document.getElementById('obraModalYear');
+    const obraModalTitle   = document.getElementById('obraModalTitle');
+    const obraModalTecnica = document.getElementById('obraModalTecnica');
+    const obraModalDesc    = document.getElementById('obraModalDesc');
+    const obraModalPrecio  = document.getElementById('obraModalPrecio');
+    const obraModalCta     = document.getElementById('obraModalCta');
+    const obraModalClose   = obraModal.querySelector('.obra-modal-close');
+    const obraModalBackdrop = obraModal.querySelector('.obra-modal-backdrop');
+
+    function abrirModal(obraId, imgSrc) {
+        const obra = obrasData[obraId];
+        if (!obra) return;
+        obraModalImg.src = imgSrc;
+        obraModalImg.alt = obra.titulo;
+        obraModalYear.textContent = obra.año;
+        obraModalTitle.textContent = obra.titulo;
+        obraModalTecnica.textContent = obra.tecnica;
+        obraModalDesc.textContent = obra.descripcion;
+        obraModalPrecio.textContent = obra.precio;
+        obraModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        obraModalClose.focus();
+    }
+
+    function cerrarModal() {
+        obraModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Populate badge text
+    trackItems.forEach(item => {
+        const badge = item.querySelector('.obra-badge');
+        if (badge) badge.textContent = 'Descripción';
+    });
 
     trackItems.forEach(item => {
         item.addEventListener('click', () => {
-            if (Math.abs(dragDistance) > 5) return; // was a drag, not a click
-            const img = item.querySelector('img');
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (Math.abs(dragDistance) > 5) return;
+            const obraId = item.getAttribute('data-obra');
+            abrirModal(obraId, item.querySelector('img').src);
         });
     });
 
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target === lightboxClose) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
+    obraModalClose.addEventListener('click', cerrarModal);
+    obraModalBackdrop.addEventListener('click', cerrarModal);
+    obraModalCta.addEventListener('click', cerrarModal);
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
+        if (e.key === 'Escape' && obraModal.classList.contains('active')) {
+            cerrarModal();
         }
     });
 });
