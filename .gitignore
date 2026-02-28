@@ -1,0 +1,12 @@
+# Archivos temporales
+*.txt
+*.psd
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

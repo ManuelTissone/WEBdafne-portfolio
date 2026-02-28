@@ -166,18 +166,29 @@ document.addEventListener('DOMContentLoaded', function() {
         contactObserver.observe(contactSection);
     }
 
+    const obrasSection = document.querySelector('.obras-section');
+    const obrasObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                obrasObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    if (obrasSection) {
+        obrasObserver.observe(obrasSection);
+    }
+
     const aboutSection = document.querySelector('.about-section');
     const aboutObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const aboutImage = entry.target.querySelector('.about-image');
-                if (aboutImage) {
-                    aboutImage.style.animation = 'fadeInUp 1s ease forwards';
-                }
+                entry.target.classList.add('visible');
                 aboutObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
 
     if (aboutSection) {
         aboutObserver.observe(aboutSection);
