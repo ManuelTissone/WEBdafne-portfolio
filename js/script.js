@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let parallaxElements = document.querySelectorAll('.parallax-section:not(.hero)');
 
     function parallaxScroll() {
+        if (window.innerWidth <= 768) return;
         parallaxElements.forEach(element => {
             let scrollPosition = window.pageYOffset;
             let elementOffset = element.offsetTop;
