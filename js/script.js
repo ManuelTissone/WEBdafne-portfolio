@@ -61,28 +61,46 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', parallaxScroll);
 
 
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-
-        console.log('Formulario enviado:');
-        console.log('Nombre:', name);
-        console.log('Email:', email);
-        console.log('Mensaje:', message);
 
         const submitButton = contactForm.querySelector('.submit-button');
         const originalText = submitButton.textContent;
-        submitButton.textContent = 'Mensaje Enviado';
-        submitButton.style.backgroundColor = '#4CAF50';
+        submitButton.textContent = 'Enviando...';
+        submitButton.disabled = true;
 
-        setTimeout(() => {
-            contactForm.reset();
-            submitButton.textContent = originalText;
-            submitButton.style.backgroundColor = '';
-        }, 3000);
+        const formData = new FormData(contactForm);
+        const json = JSON.stringify(Object.fromEntries(formData));
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                submitButton.textContent = 'Mensaje Enviado';
+                submitButton.style.backgroundColor = '#4CAF50';
+                contactForm.reset();
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            submitButton.textContent = 'Error al enviar';
+            submitButton.style.backgroundColor = '#c0392b';
+        } finally {
+            setTimeout(() => {
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = '';
+                submitButton.disabled = false;
+            }, 3000);
+        }
     });
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

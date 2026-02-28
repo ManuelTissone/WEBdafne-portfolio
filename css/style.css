@@ -29,7 +29,7 @@
     --font-2xl: 35px;
 
     /* Separator height */
-    --separator-height: 20vh;
+    --separator-height: 2cm;
 }
 
 html {
@@ -423,8 +423,7 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    min-height: var(--separator-height);
-    padding: var(--spacing-xl) 0;
+    height: var(--separator-height);
     position: relative;
 }
 
@@ -450,8 +449,7 @@ body {
     background-size: 15%;
     background-position: center;
     background-attachment: fixed;
-    min-height: var(--separator-height);
-    padding: var(--spacing-xl) 0;
+    height: var(--separator-height);
     position: relative;
     background-repeat: no-repeat;
 }
@@ -717,7 +715,7 @@ body {
 
 @media (max-width: 768px) {
     :root {
-        --separator-height: 25vh;
+        --separator-height: 1cm;
     }
 
     .nav-links {
@@ -880,6 +878,6 @@ body {
 
     .separador-section,
     .nueva-seccion {
-        padding: var(--spacing-lg) 0;
+        height: 1cm;
     }
 }
