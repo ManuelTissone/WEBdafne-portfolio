@@ -225,6 +225,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Carousel: auto-scroll + mouse drag (PC) + touch swipe (mobile)
     const track = document.querySelector('.carousel-track');
+    // Clone all items and append to create seamless infinite loop
+    const originalItems = Array.from(track.querySelectorAll('.carousel-item'));
+    originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
     const trackItems = track.querySelectorAll('.carousel-item');
     const halfWidth = track.scrollWidth / 2;
     let position = 0;
