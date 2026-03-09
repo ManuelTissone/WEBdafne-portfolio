@@ -317,33 +317,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Obra Modal
     const obrasData = {
-        foco: {
-            titulo: 'El Foco',
+        galeria1: {
+            titulo: 'Sinfonía Urbana',
+            tecnica: 'Lapicera Bic y lápices de color sobre papel',
+            descripcion: 'Una mirada cenital sobre el caos ordenado de la ciudad. Edificios, teclados y una figura que se disuelve en el paisaje urbano conforman una composición donde lo arquitectónico y lo humano se funden en una misma melodía visual.',
+            precio: 'USD 620',
+            año: '2024'
+        },
+        alfil: {
+            titulo: 'El Alfil y el Tiempo',
             tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Una introspección surrealista sobre la iluminación y el pensamiento creativo. El trazo de la Bic revela la dualidad entre lo cotidiano y lo extraordinario.',
-            precio: 'USD 450',
+            descripcion: 'El alfil de ajedrez emerge de una espiral de plumas y esferas, flanqueado por un reloj de bolsillo que marca un tiempo suspendido. Una reflexión sobre la estrategia, el azar y la fugacidad del instante.',
+            precio: 'USD 480',
             año: '2023'
         },
-        pildoras: {
-            titulo: 'Píldoras',
-            tecnica: 'Lapicera Bic - Papel Texturado - Colores Lyra',
-            descripcion: 'Composición que explora la tensión entre lo orgánico y lo artificial. Cada detalle fue construido trazo a trazo con paciencia y precisión.',
-            precio: 'USD 380',
-            año: '2026'
-        },
-        saxo: {
-            titulo: 'Saxofón',
+        cerebro: {
+            titulo: 'Candados',
             tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Un homenaje a la música como lenguaje universal. La geometría del instrumento se convierte en poesía visual donde el ritmo y el trazo convergen.',
+            descripcion: 'Un cerebro suspendido del que penden candados abiertos y cerrados. Aves-llaves intentan liberarse de su propio peso. Una metáfora sobre los pensamientos que aprisionamos y aquellos que nos atrevemos a soltar.',
+            precio: 'USD 550',
+            año: '2023'
+        },
+        ernest: {
+            titulo: 'El Cuarto de Ernest',
+            tecnica: 'Lapicera Bic sobre papel',
+            descripcion: 'Un interior donde conviven una espada, auriculares, una batería y teclas de piano desordenadas. El cuarto como archivo de experiencias: la música, la lucha y el recuerdo se superponen en un mismo espacio onírico.',
+            precio: 'USD 580',
+            año: '2025'
+        },
+        maquinaria: {
+            titulo: 'Neuroengranaje',
+            tecnica: 'Lapicera Bic y lápices de color sobre papel',
+            descripcion: 'Neuronas que se entrelazan con tornillos, engranajes y piezas mecánicas. La obra explora el límite borroso entre lo biológico y lo industrial, preguntando si el pensamiento es impulso eléctrico o simplemente maquinaria bien aceitada.',
+            precio: 'USD 490',
+            año: '2024'
+        },
+        mesadeluz: {
+            titulo: 'Mesa de Luz',
+            tecnica: 'Lapicera Bic y lápices de color sobre papel',
+            descripcion: 'Sobre una superficie imposible se acumulan objetos cotidianos que pierden su lógica: una botella atada, larvas geométricas, dientes que sonríen solos y un ojo que todo lo observa. La mesa como escenario de los sueños que no pedimos tener.',
+            precio: 'USD 560',
+            año: '2024'
+        },
+        serpsaxo: {
+            titulo: 'Serpiente de Jazz',
+            tecnica: 'Lapicera Bic sobre papel',
+            descripcion: 'Un saxofón se transforma en serpiente y la serpiente en música. Un ojo integrado en el cuerpo del instrumento lo vuelve ser vivo. La obra celebra el jazz como algo instintivo, reptante e imposible de domesticar.',
             precio: 'USD 520',
+            año: '2022'
+        },
+        tucan: {
+            titulo: 'Tucán',
+            tecnica: 'Lapicera Bic y lápices de color sobre papel',
+            descripcion: 'Un tucán de pico dorado con ojo mecánico flota sobre un paisaje de olas y puentes. Sus plumas se deshacen en líneas de agua mientras unas tijeras cortan el aire debajo. La libertad como algo que siempre está a punto de ser recortado.',
+            precio: 'USD 610',
             año: '2023'
         },
-        tuercas: {
-            titulo: 'Tuercas',
-            tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Los objetos mecánicos del cotidiano transformados en composición artística. La precisión del trazo refleja la complejidad de lo simple.',
-            precio: 'USD 290',
-            año: '2022'
+        velacrater: {
+            titulo: 'Vela Cráter',
+            tecnica: 'Lapicera Bic y lápices de color sobre papel',
+            descripcion: 'Una vela que se derrite sobre un campo volcánico al atardecer. En primer plano, una taza guarda una lamparita como un secreto luminoso. La extinción y la luz coexisten: lo que se apaga afuera enciende algo adentro.',
+            precio: 'USD 640',
+            año: '2024'
         }
     };
 
