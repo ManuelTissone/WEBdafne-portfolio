@@ -223,94 +223,119 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', updateMagicText, { passive: true });
     updateMagicText();
 
-    // Carousel: auto-scroll + mouse drag (PC) + touch swipe (mobile)
+    // Carousel: continuous RAF scroll with seamless infinite loop
     const track = document.querySelector('.carousel-track');
-    // Clone all items and append to create seamless infinite loop
-    const originalItems = Array.from(track.querySelectorAll('.carousel-item'));
-    originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
-    const trackItems = track.querySelectorAll('.carousel-item');
-    const halfWidth = track.scrollWidth / 2;
-    let position = 0;
-    let autoSpeed = 0.8; // px per frame
+    const trackItems = Array.from(track.querySelectorAll('.carousel-item'));
+    const totalItems = trackItems.length;
+
+    // Clone items for seamless infinite loop
+    trackItems.forEach(item => {
+        const clone = item.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+    });
+
+    let rafPos = 0;
+    let rafId;
+    let rafPaused = false;
     let isDragging = false;
-    let startX = 0;
+    let dragStartX = 0;
     let dragStartPos = 0;
     let dragDistance = 0;
-    let lastTime = performance.now();
-    let velocity = 0;
-    let animationId;
+    const rafSpeed = 0.45;
 
-    function animate(now) {
-        const delta = now - lastTime;
-        lastTime = now;
-
-        if (!isDragging) {
-            // Apply velocity decay after drag release
-            if (Math.abs(velocity) > 0.5) {
-                position -= velocity;
-                velocity *= 0.95;
-            } else {
-                velocity = 0;
-                position -= autoSpeed;
-            }
-        }
-
-        // Loop: reset when past half (duplicated items)
-        if (position <= -halfWidth) {
-            position += halfWidth;
-        } else if (position > 0) {
-            position -= halfWidth;
-        }
-
-        track.style.transform = `translateX(${position}px)`;
-        animationId = requestAnimationFrame(animate);
+    function getItemTotalWidth() {
+        const gap = parseFloat(getComputedStyle(track).gap) || 16;
+        return trackItems[0].offsetWidth + gap;
     }
 
-    animationId = requestAnimationFrame(animate);
+    function getSeparatorWidth() {
+        const sep = track.querySelector('.carousel-separator');
+        if (!sep) return 0;
+        const gap = parseFloat(getComputedStyle(track).gap) || 16;
+        return sep.offsetWidth + gap;
+    }
+
+    function getOriginalWidth() {
+        return totalItems * getItemTotalWidth() + getSeparatorWidth();
+    }
+
+    function normalizePos(pos) {
+        const w = getOriginalWidth();
+        return ((pos % w) + w) % w;
+    }
+
+    function applyPos(pos, transition) {
+        track.style.transition = transition || 'none';
+        track.style.transform = `translateX(${-pos}px)`;
+    }
+
+    function rafLoop() {
+        if (!rafPaused && !isDragging) {
+            rafPos += rafSpeed;
+            const w = getOriginalWidth();
+            if (rafPos >= w) rafPos -= w;
+            applyPos(rafPos);
+        }
+        rafId = requestAnimationFrame(rafLoop);
+    }
+
 
     // Mouse drag (PC)
     track.addEventListener('mousedown', (e) => {
         isDragging = true;
-        startX = e.clientX;
-        dragStartPos = position;
+        dragStartX = e.clientX;
+        dragStartPos = rafPos;
         dragDistance = 0;
-        velocity = 0;
+        track.classList.add('is-dragging');
         e.preventDefault();
     });
 
     window.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
-        const diff = e.clientX - startX;
-        dragDistance = diff;
-        position = dragStartPos + diff;
+        dragDistance = e.clientX - dragStartX;
+        applyPos(normalizePos(dragStartPos - dragDistance));
     });
 
     window.addEventListener('mouseup', () => {
         if (!isDragging) return;
         isDragging = false;
-        velocity = -dragDistance * 0.05;
+        track.classList.remove('is-dragging');
+        const itemW = getItemTotalWidth();
+        rafPos = normalizePos(Math.round((dragStartPos - dragDistance) / itemW) * itemW);
+        applyPos(rafPos, 'transform 0.4s ease');
     });
 
     // Touch swipe (mobile)
     track.addEventListener('touchstart', (e) => {
         isDragging = true;
-        startX = e.touches[0].clientX;
-        dragStartPos = position;
+        dragStartX = e.touches[0].clientX;
+        dragStartPos = rafPos;
         dragDistance = 0;
-        velocity = 0;
+        track.classList.add('is-dragging');
     }, { passive: true });
 
     track.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
-        const diff = e.touches[0].clientX - startX;
-        dragDistance = diff;
-        position = dragStartPos + diff;
+        dragDistance = e.touches[0].clientX - dragStartX;
+        applyPos(normalizePos(dragStartPos - dragDistance));
     }, { passive: true });
 
     track.addEventListener('touchend', () => {
         if (!isDragging) return;
         isDragging = false;
-        velocity = -dragDistance * 0.05;
+        track.classList.remove('is-dragging');
+        const itemW = getItemTotalWidth();
+        let snap = dragStartPos - dragDistance;
+        if (Math.abs(dragDistance) > 60) {
+            snap = dragDistance < 0
+                ? Math.ceil(snap / itemW) * itemW
+                : Math.floor(snap / itemW) * itemW;
+        } else {
+            snap = Math.round(snap / itemW) * itemW;
+        }
+        rafPos = normalizePos(snap);
+        applyPos(rafPos, 'transform 0.4s ease');
     });
 
     // Prevent img drag ghost
@@ -318,72 +343,115 @@ document.addEventListener('DOMContentLoaded', function() {
         img.addEventListener('dragstart', (e) => e.preventDefault());
     });
 
+    // Pause on hover so the user can click
+    const carouselContainer = document.querySelector('.carousel-container');
+    carouselContainer.addEventListener('mouseenter', () => { rafPaused = true; });
+    carouselContainer.addEventListener('mouseleave', () => { rafPaused = false; });
+
     // Obra Modal
     const obrasData = {
-        galeria1: {
-            titulo: 'Sinfonía Urbana',
-            tecnica: 'Lapicera Bic y lápices de color sobre papel',
-            descripcion: 'Una mirada cenital sobre el caos ordenado de la ciudad. Edificios, teclados y una figura que se disuelve en el paisaje urbano conforman una composición donde lo arquitectónico y lo humano se funden en una misma melodía visual.',
-            precio: 'USD 620',
-            año: '2024'
-        },
         alfil: {
-            titulo: 'El Alfil y el Tiempo',
-            tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'El alfil de ajedrez emerge de una espiral de plumas y esferas, flanqueado por un reloj de bolsillo que marca un tiempo suspendido. Una reflexión sobre la estrategia, el azar y la fugacidad del instante.',
-            precio: 'USD 480',
-            año: '2023'
+            titulo: '',       // Título de la obra
+            tecnica: '',      // Técnica utilizada
+            descripcion: '',  // Descripción de la obra
+            precio: '',       // Precio (ej: USD 500)
+            año: ''           // Año (ej: 2024)
+        },
+        broches: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         cerebro: {
-            titulo: 'Candados',
-            tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Un cerebro suspendido del que penden candados abiertos y cerrados. Aves-llaves intentan liberarse de su propio peso. Una metáfora sobre los pensamientos que aprisionamos y aquellos que nos atrevemos a soltar.',
-            precio: 'USD 550',
-            año: '2023'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
+        },
+        corazon: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         ernest: {
-            titulo: 'El Cuarto de Ernest',
-            tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Un interior donde conviven una espada, auriculares, una batería y teclas de piano desordenadas. El cuarto como archivo de experiencias: la música, la lucha y el recuerdo se superponen en un mismo espacio onírico.',
-            precio: 'USD 580',
-            año: '2025'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         maquinaria: {
-            titulo: 'Neuroengranaje',
-            tecnica: 'Lapicera Bic y lápices de color sobre papel',
-            descripcion: 'Neuronas que se entrelazan con tornillos, engranajes y piezas mecánicas. La obra explora el límite borroso entre lo biológico y lo industrial, preguntando si el pensamiento es impulso eléctrico o simplemente maquinaria bien aceitada.',
-            precio: 'USD 490',
-            año: '2024'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         mesadeluz: {
-            titulo: 'Mesa de Luz',
-            tecnica: 'Lapicera Bic y lápices de color sobre papel',
-            descripcion: 'Sobre una superficie imposible se acumulan objetos cotidianos que pierden su lógica: una botella atada, larvas geométricas, dientes que sonríen solos y un ojo que todo lo observa. La mesa como escenario de los sueños que no pedimos tener.',
-            precio: 'USD 560',
-            año: '2024'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
+        },
+        lapiceras: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
+        },
+        piano: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
+        },
+        pildoras: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         serpsaxo: {
-            titulo: 'Serpiente de Jazz',
-            tecnica: 'Lapicera Bic sobre papel',
-            descripcion: 'Un saxofón se transforma en serpiente y la serpiente en música. Un ojo integrado en el cuerpo del instrumento lo vuelve ser vivo. La obra celebra el jazz como algo instintivo, reptante e imposible de domesticar.',
-            precio: 'USD 520',
-            año: '2022'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
+        },
+        tambores: {
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         tucan: {
-            titulo: 'Tucán',
-            tecnica: 'Lapicera Bic y lápices de color sobre papel',
-            descripcion: 'Un tucán de pico dorado con ojo mecánico flota sobre un paisaje de olas y puentes. Sus plumas se deshacen en líneas de agua mientras unas tijeras cortan el aire debajo. La libertad como algo que siempre está a punto de ser recortado.',
-            precio: 'USD 610',
-            año: '2023'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         },
         velacrater: {
-            titulo: 'Vela Cráter',
-            tecnica: 'Lapicera Bic y lápices de color sobre papel',
-            descripcion: 'Una vela que se derrite sobre un campo volcánico al atardecer. En primer plano, una taza guarda una lamparita como un secreto luminoso. La extinción y la luz coexisten: lo que se apaga afuera enciende algo adentro.',
-            precio: 'USD 640',
-            año: '2024'
+            titulo: '',
+            tecnica: '',
+            descripcion: '',
+            precio: '',
+            año: ''
         }
     };
+
+    // Start continuous scroll
+    rafLoop();
 
     const obraModal        = document.getElementById('obraModal');
     const obraModalImg     = document.getElementById('obraModalImg');
@@ -414,6 +482,30 @@ document.addEventListener('DOMContentLoaded', function() {
     function cerrarModal() {
         obraModal.classList.remove('active');
         document.body.style.overflow = '';
+        obraModalImg.style.transition = '';
+        obraModalImg.style.transform = '';
+        obraModalImg.style.transformOrigin = '';
+    }
+
+    // Zoom en imagen del modal — solo en dispositivos no-touch
+    const imgWrap = obraModalImg.closest('.obra-modal-img-wrap');
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    if (!isTouch) {
+        imgWrap.addEventListener('mousemove', (e) => {
+            const rect = imgWrap.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            obraModalImg.style.transition = 'none';
+            obraModalImg.style.transformOrigin = `${x}% ${y}%`;
+            obraModalImg.style.transform = 'scale(2.4)';
+        });
+
+        imgWrap.addEventListener('mouseleave', () => {
+            obraModalImg.style.transition = 'transform 0.4s ease';
+            obraModalImg.style.transform = 'scale(1)';
+            setTimeout(() => { obraModalImg.style.transformOrigin = 'center center'; }, 400);
+        });
     }
 
     // Populate badge text
@@ -422,12 +514,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (badge) badge.textContent = 'Descripción';
     });
 
-    trackItems.forEach(item => {
-        item.addEventListener('click', () => {
-            if (Math.abs(dragDistance) > 5) return;
-            const obraId = item.getAttribute('data-obra');
-            abrirModal(obraId, item.querySelector('img').src);
-        });
+    // Event delegation handles clicks on originals AND clones
+    track.addEventListener('click', (e) => {
+        if (Math.abs(dragDistance) > 5) return;
+        const item = e.target.closest('.carousel-item');
+        if (!item) return;
+        const obraId = item.getAttribute('data-obra');
+        if (!obraId) return;
+        abrirModal(obraId, item.querySelector('img').src);
     });
 
     obraModalClose.addEventListener('click', cerrarModal);
