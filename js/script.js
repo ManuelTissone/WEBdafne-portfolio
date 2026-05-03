@@ -351,100 +351,100 @@ document.addEventListener('DOMContentLoaded', function() {
     // Obra Modal
     const obrasData = {
         alfil: {
-            titulo: '',       // Título de la obra
+            titulo: 'Tiempo en hacke',       // Título de la obra
             tecnica: '',      // Técnica utilizada
-            descripcion: '',  // Descripción de la obra
+            descripcion: 'Soporte: 21 x 29,7cm',  // Descripción de la obra
             precio: '',       // Precio (ej: USD 500)
             año: ''           // Año (ej: 2024)
         },
         broches: {
-            titulo: '',
+            titulo: 'Insostenible',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         cerebro: {
-            titulo: '',
+            titulo: 'Cementerio de pensamientos',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 29,7 x 42cm',
             precio: '',
             año: ''
         },
         corazon: {
-            titulo: '',
+            titulo: 'Espacio ritmico',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         ernest: {
-            titulo: '',
+            titulo: 'El comandante',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         maquinaria: {
-            titulo: '',
+            titulo: 'Maquinarse',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         mesadeluz: {
-            titulo: '',
+            titulo: 'Cuando duermo',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 29,7 x 42cm',
             precio: '',
             año: ''
         },
         lapiceras: {
-            titulo: '',
+            titulo: 'Bic siendo Bic',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         piano: {
-            titulo: '',
+            titulo: '"Laura"',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 29,7 x 42cm',
             precio: '',
             año: ''
         },
         pildoras: {
-            titulo: '',
+            titulo: 'Tango',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         serpsaxo: {
-            titulo: '',
+            titulo: 'Monte barbaro',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         tambores: {
-            titulo: '',
+            titulo: 'Cuerda',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         },
         tucan: {
-            titulo: '',
+            titulo: 'Taxidermia',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 29,7 x 42cm',
             precio: '',
             año: ''
         },
         velacrater: {
-            titulo: '',
+            titulo: 'Desierto',
             tecnica: '',
-            descripcion: '',
+            descripcion: 'Soporte: 21 x 29,7cm',
             precio: '',
             año: ''
         }
@@ -453,20 +453,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start continuous scroll
     rafLoop();
 
-    const obraModal        = document.getElementById('obraModal');
-    const obraModalImg     = document.getElementById('obraModalImg');
-    const obraModalYear    = document.getElementById('obraModalYear');
-    const obraModalTitle   = document.getElementById('obraModalTitle');
-    const obraModalTecnica = document.getElementById('obraModalTecnica');
-    const obraModalDesc    = document.getElementById('obraModalDesc');
-    const obraModalPrecio  = document.getElementById('obraModalPrecio');
-    const obraModalCta     = document.getElementById('obraModalCta');
-    const obraModalClose   = obraModal.querySelector('.obra-modal-close');
+    const obraModal         = document.getElementById('obraModal');
+    const obraModalImg      = document.getElementById('obraModalImg');
+    const obraModalYear     = document.getElementById('obraModalYear');
+    const obraModalTitle    = document.getElementById('obraModalTitle');
+    const obraModalTecnica  = document.getElementById('obraModalTecnica');
+    const obraModalDesc     = document.getElementById('obraModalDesc');
+    const obraModalPrecio   = document.getElementById('obraModalPrecio');
+    const obraModalCta      = document.getElementById('obraModalCta');
+    const obraModalClose    = obraModal.querySelector('.obra-modal-close');
     const obraModalBackdrop = obraModal.querySelector('.obra-modal-backdrop');
+    const obraModalNavPrev  = obraModal.querySelector('.obra-modal-nav-prev');
+    const obraModalNavNext  = obraModal.querySelector('.obra-modal-nav-next');
 
-    function abrirModal(obraId, imgSrc) {
+    let currentModalIndex = 0;
+
+    function abrirModal(obraId, imgSrc, index) {
         const obra = obrasData[obraId];
         if (!obra) return;
+        if (index !== undefined) currentModalIndex = index;
         obraModalImg.src = imgSrc;
         obraModalImg.alt = obra.titulo;
         obraModalYear.textContent = obra.año;
@@ -477,6 +482,30 @@ document.addEventListener('DOMContentLoaded', function() {
         obraModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         obraModalClose.focus();
+    }
+
+    function navegarModal(dir) {
+        const newIndex = ((currentModalIndex + dir) % totalItems + totalItems) % totalItems;
+        const item = trackItems[newIndex];
+        const obraId = item.getAttribute('data-obra');
+        // Fade out → swap → fade in
+        obraModalImg.style.transition = 'opacity 0.15s ease';
+        obraModalImg.style.opacity = '0';
+        obraModalImg.style.transform = '';
+        obraModalImg.style.transformOrigin = '';
+        setTimeout(() => {
+            currentModalIndex = newIndex;
+            obraModalImg.src = item.querySelector('img').src;
+            const obra = obrasData[obraId] || {};
+            obraModalImg.alt      = obra.titulo || '';
+            obraModalYear.textContent    = obra.año || '';
+            obraModalTitle.textContent   = obra.titulo || '';
+            obraModalTecnica.textContent = obra.tecnica || '';
+            obraModalDesc.textContent    = obra.descripcion || '';
+            obraModalPrecio.textContent  = obra.precio || '';
+            obraModalImg.style.opacity = '1';
+            setTimeout(() => { obraModalImg.style.transition = ''; }, 150);
+        }, 150);
     }
 
     function cerrarModal() {
@@ -521,16 +550,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!item) return;
         const obraId = item.getAttribute('data-obra');
         if (!obraId) return;
-        abrirModal(obraId, item.querySelector('img').src);
+        const idx = trackItems.findIndex(t => t.getAttribute('data-obra') === obraId);
+        abrirModal(obraId, item.querySelector('img').src, idx);
     });
 
     obraModalClose.addEventListener('click', cerrarModal);
     obraModalBackdrop.addEventListener('click', cerrarModal);
     obraModalCta.addEventListener('click', cerrarModal);
+    obraModalNavPrev.addEventListener('click', () => navegarModal(-1));
+    obraModalNavNext.addEventListener('click', () => navegarModal(1));
+
+    // Swipe en mobile para navegar
+    let modalSwipeX = 0;
+    obraModal.addEventListener('touchstart', (e) => { modalSwipeX = e.touches[0].clientX; }, { passive: true });
+    obraModal.addEventListener('touchend', (e) => {
+        const diff = modalSwipeX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) navegarModal(diff > 0 ? 1 : -1);
+    });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && obraModal.classList.contains('active')) {
-            cerrarModal();
-        }
+        if (!obraModal.classList.contains('active')) return;
+        if (e.key === 'Escape')      cerrarModal();
+        if (e.key === 'ArrowLeft')   navegarModal(-1);
+        if (e.key === 'ArrowRight')  navegarModal(1);
     });
 });

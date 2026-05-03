@@ -506,6 +506,33 @@ body {
     cursor: pointer;
 }
 
+.obra-modal-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2001;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.45);
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.obra-modal-nav:hover {
+    border-color: rgba(255, 255, 255, 0.65);
+    color: var(--white);
+}
+
+.obra-modal-nav-prev { left: 24px; }
+.obra-modal-nav-next { right: 24px; }
+
 .obra-modal-content {
     position: relative;
     z-index: 1;
@@ -1289,6 +1316,9 @@ body {
         to   { transform: translateY(0);    opacity: 1; }
     }
     .obra-modal-close  { top: 12px; right: var(--spacing-md); }
+    .obra-modal-nav    { top: auto; bottom: calc(88vh + 12px); transform: none; width: 40px; height: 40px; font-size: 16px; }
+    .obra-modal-nav-prev { left: 12px; }
+    .obra-modal-nav-next { right: 12px; }
     .obra-modal-img-wrap { cursor: default; } /* sin zoom-in cursor en touch */
     .obra-modal-img-wrap img { max-height: 42vh; }
     .obra-modal-title  { font-size: 20px; letter-spacing: 3px; }

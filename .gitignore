@@ -1,6 +1,4 @@
-# Archivos temporales
-*.txt
-*.psd
+# OS
 .DS_Store
 Thumbs.db
 
@@ -8,5 +6,40 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Logs
+# Logs y temporales
 *.log
+*.psd
+*.txt
+
+# ─── Imágenes sin usar ───────────────────────────────────────────
+
+# Variantes del hero no referenciadas
+images/serpiente.JPG
+images/edit2.JPG
+images/edit6.2.jpg
+images/edit6cel.jpg
+images/edit6celular.jpg
+
+# Separadores no referenciados
+images/separador.jpg
+images/sepa2.png
+images/sepa3.png
+
+# Fotos personales / archivos sin usar en el sitio
+images/otros/
+
+# Versiones no-WIP de obras actualmente en proceso
+# (reemplazadas por sus versiones WIP en el carrusel)
+images/Galeria/Galeria-Alfil.jpg
+images/Galeria/Galeria-Cerebro.jpg
+images/Galeria/Galeria-Corazon.jpg
+images/Galeria/Galeria-Lapiceras.jpg
+images/Galeria/Galeria-Maquinaria.jpg
+images/Galeria/Galeria-Mesadeluz.jpg
+images/Galeria/Galeria-Piano.jpg
+images/Galeria/Galeria-Tambores.jpg
+images/Galeria/Galeria-Tucan.jpg
+images/Galeria/Galeria-pildoras.jpg
+
+# Obras sin referencias en el HTML aún
+images/Galeria/Galeria-Colores.jpg
